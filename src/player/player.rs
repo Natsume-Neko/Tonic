@@ -1,4 +1,4 @@
-use rodio::{Decoder, OutputStream, OutputStreamHandle, Sink};
+use rodio::{OutputStream, OutputStreamHandle, Sink};
 // use std::time::{Duration, Instant};
 use std::fs::File;
 use std::io::BufReader;
