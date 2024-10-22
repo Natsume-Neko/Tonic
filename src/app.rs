@@ -6,18 +6,20 @@ use crossterm::event::{self, KeyCode, Event, KeyEventKind};
 use ratatui::Frame;
 use ratatui::layout::Direction;
 use ratatui::prelude::{Constraint, Layout};
+use crate::fs;
 use crate::handlers::player_handler::handle_player;
 use crate::tui::prompts::{draw_player_status, draw_prompts};
 
 pub struct App {
     pub music_player: MusicPlayer,
-
+    pub fs: fs::fs::FileSystem,
 }
 
 impl App {
     pub fn new() -> Self {
         Self {
             music_player: MusicPlayer::new(),
+            fs: fs::fs::FileSystem::new(),
         }
     }
 
