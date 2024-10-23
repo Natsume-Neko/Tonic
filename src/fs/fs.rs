@@ -9,7 +9,7 @@ struct PathItem {
 pub struct FileSystem {
     current_dir: PathBuf,
     path_items: Vec<PathItem>,
-    on_item_idx: u32,
+    on_item_idx: usize,
 }
 
 pub enum MoveCurseDirection {
@@ -50,6 +50,12 @@ impl FileSystem {
         path_items
     }
 
+    pub fn get_to_curse_on(&mut self) -> bool {
+        let current_path_name = self.path_items.get(self.on_item_idx).unwrap().path_name.clone();
+        self.update_current_directory(&current_path_name);
+        true
+    }
+
     pub fn update_current_directory(&mut self, next_dir: &String) {
         let new_path = self.current_dir.join(next_dir).canonicalize().unwrap();
         self.current_dir = new_path;
@@ -57,14 +63,16 @@ impl FileSystem {
         self.on_item_idx = 0;
     }
 
-    pub fn update_current_on(&mut self, direction: MoveCurseDirection) {
-        let len = self.path_items.len() as u32;
+    pub fn update_current_on(&mut self, direction: MoveCurseDirection) -> bool {
+        let len = self.path_items.len();
         match direction {
             MoveCurseDirection::Up => {
                 self.on_item_idx = (self.on_item_idx + len - 1) % len;
+                true
             }
             MoveCurseDirection::Down => {
                 self.on_item_idx = (self.on_item_idx + 1) % len;
+                true
             }
         }
     }
@@ -80,12 +88,12 @@ mod tests {
         for item in fs.path_items.iter() {
             println!("{}", item.path_name);
         }
-        fs.update_current_directory(&"..".into());
+        fs.get_to_curse_on();
         println!("{}", fs.current_dir.file_name().unwrap().to_string_lossy().to_string());
         for item in fs.path_items.iter() {
             println!("{}", item.path_name);
         }
-        let len = fs.path_items.len() as u32;
+        let len = fs.path_items.len();
         for _ in 0..30 {
             fs.update_current_on(MoveCurseDirection::Up);
         }
