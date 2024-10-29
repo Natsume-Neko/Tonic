@@ -3,13 +3,13 @@ use std::env;
 use std::path::PathBuf;
 
 struct PathItem {
-    path_name: String,
-    full_path: PathBuf,
+    pub path_name: String,
+    pub full_path: PathBuf,
 }
 pub struct FileSystem {
-    current_dir: PathBuf,
-    path_items: Vec<PathItem>,
-    on_item_idx: usize,
+    pub current_dir: PathBuf,
+    pub path_items: Vec<PathItem>,
+    pub on_item_idx: usize,
 }
 
 pub enum MoveCurseDirection {

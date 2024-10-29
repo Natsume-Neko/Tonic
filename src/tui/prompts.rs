@@ -1,7 +1,7 @@
 use failure::Error;
+use ratatui::style::Stylize;
 use ratatui::Frame;
 use ratatui::layout::Alignment;
-use ratatui::style::Stylize;
 use ratatui::prelude::Rect;
 use ratatui::widgets::{Block, Paragraph};
 use ratatui::widgets::block::{Title};

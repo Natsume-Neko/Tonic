@@ -8,11 +8,13 @@ use ratatui::layout::Direction;
 use ratatui::prelude::{Constraint, Layout};
 use crate::fs;
 use crate::handlers::player_handler::handle_player;
+use crate::tui::fs_control::FsControllerState;
 use crate::tui::prompts::{draw_player_status, draw_prompts};
 
 pub struct App {
     pub music_player: MusicPlayer,
     pub fs: fs::fs::FileSystem,
+    pub fs_controller_state: FsControllerState,
 }
 
 impl App {
@@ -20,6 +22,7 @@ impl App {
         Self {
             music_player: MusicPlayer::new(),
             fs: fs::fs::FileSystem::new(),
+            fs_controller_state: FsControllerState::new(),
         }
     }
 
