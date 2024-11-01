@@ -2,7 +2,7 @@ use std::fs;
 use std::env;
 use std::path::PathBuf;
 
-struct PathItem {
+pub struct PathItem {
     pub path_name: String,
     pub full_path: PathBuf,
 }

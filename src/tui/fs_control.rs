@@ -18,15 +18,30 @@ impl FsControllerState {
             relative_position: 1
         }
     }
+
+    pub fn move_relative_position_up(&mut self) {
+        if self.relative_position != 1 {
+            self.relative_position -= 1;
+        }
+    }
+
+    pub fn move_relative_position_down(&mut self) {
+        self.relative_position += 1;
+    }
+
+    pub fn set_relative_position(&mut self, new_position: u16) {
+        self.relative_position = new_position;
+    }
 }
+
 pub fn draw_fs_controller(app: &mut App, frame: &mut Frame, area: Rect) -> Result<(), Error> {
     let title = Title::from("Directory".cyan().bold());
     let block = Block::bordered()
         .title(title.alignment(Alignment::Left))
-        .border_set(border::FULL);
+        .border_set(border::THICK);
     let windows_size = area.height;
     if app.fs_controller_state.relative_position > windows_size {
-        app.fs_controller_state.relative_position = windows_size
+        app.fs_controller_state.set_relative_position(windows_size);
     }
     let relative_position = app.fs_controller_state.relative_position;
     let idx = app.fs.on_item_idx as u16;

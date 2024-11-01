@@ -7,8 +7,9 @@ use ratatui::Frame;
 use ratatui::layout::Direction;
 use ratatui::prelude::{Constraint, Layout};
 use crate::fs;
+use crate::handlers::fs_handler::handle_fs;
 use crate::handlers::player_handler::handle_player;
-use crate::tui::fs_control::FsControllerState;
+use crate::tui::fs_control::{draw_fs_controller, FsControllerState};
 use crate::tui::prompts::{draw_player_status, draw_prompts};
 
 pub struct App {
@@ -72,6 +73,7 @@ impl App {
                     }
                     _ => {
                         handle_player(self, code);
+                        handle_fs(self, code);
                     }
                 }
             }
@@ -80,15 +82,17 @@ impl App {
         ratatui::restore();
         Ok(())
     }
-    fn draw_tui(&self, frame: &mut Frame) {
+    fn draw_tui(&mut self, frame: &mut Frame) {
         let layout = Layout::default()
             .direction(Direction::Vertical)
             .constraints(vec![
-                Constraint::Percentage(50),
+                Constraint::Percentage(25),
+                Constraint::Percentage(25),
                 Constraint::Percentage(50),
             ])
             .split(frame.area());
         draw_prompts(frame, layout[0]).unwrap();
-        draw_player_status(self, frame, layout[1]).unwrap();
+        draw_fs_controller(self, frame, layout[1]).unwrap();
+        draw_player_status(self, frame, layout[2]).unwrap();
     }
 }
