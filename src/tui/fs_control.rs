@@ -1,3 +1,4 @@
+use std::cmp::min;
 use ratatui::style::Stylize;
 use failure::Error;
 use ratatui::Frame;
@@ -39,7 +40,11 @@ pub fn draw_fs_controller(app: &mut App, frame: &mut Frame, area: Rect) -> Resul
     let block = Block::bordered()
         .title(title.alignment(Alignment::Left))
         .border_set(border::THICK);
-    let windows_size = area.height;
+    let windows_size = if area.height > 2 {
+        min(area.height - 2, app.fs.path_items.len() as u16)
+    } else {
+        0
+    };
     if app.fs_controller_state.relative_position > windows_size {
         app.fs_controller_state.set_relative_position(windows_size);
     }

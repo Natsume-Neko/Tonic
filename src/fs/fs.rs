@@ -10,6 +10,7 @@ pub struct FileSystem {
     pub current_dir: PathBuf,
     pub path_items: Vec<PathItem>,
     pub on_item_idx: usize,
+    pub on_item_dir: PathBuf,
 }
 
 pub enum MoveCurseDirection {
@@ -21,10 +22,12 @@ impl FileSystem {
     pub fn new() -> Self {
         let current_dir = env::current_dir().unwrap();
         let path_items = Self::get_path_items(&current_dir);
+        let on_item_dir = path_items.get(0).unwrap().full_path.clone();
         Self {
             current_dir,
             path_items,
-            on_item_idx: 0
+            on_item_idx: 0,
+            on_item_dir
         }
     }
 
@@ -52,8 +55,12 @@ impl FileSystem {
 
     pub fn get_to_curse_on(&mut self) -> bool {
         let current_path_name = self.path_items.get(self.on_item_idx).unwrap().path_name.clone();
-        self.update_current_directory(&current_path_name);
-        true
+        let current_path = &self.path_items.get(self.on_item_idx).unwrap().full_path;
+        if current_path.is_dir() {
+            self.update_current_directory(&current_path_name);
+            return true;
+        }
+        false
     }
 
     pub fn update_current_directory(&mut self, next_dir: &String) {
@@ -61,20 +68,31 @@ impl FileSystem {
         self.current_dir = new_path;
         self.path_items = Self::get_path_items(&self.current_dir);
         self.on_item_idx = 0;
+        self.update_on_item_dir();
     }
 
     pub fn update_current_on(&mut self, direction: MoveCurseDirection) -> bool {
         let len = self.path_items.len();
         match direction {
             MoveCurseDirection::Up => {
-                self.on_item_idx = (self.on_item_idx + len - 1) % len;
-                true
+                if self.on_item_idx > 0 {
+                    self.on_item_idx -= 1;
+                }
+                // self.on_item_idx = (self.on_item_idx + len - 1) % len;
             }
             MoveCurseDirection::Down => {
-                self.on_item_idx = (self.on_item_idx + 1) % len;
-                true
+                if self.on_item_idx + 1 < len {
+                    self.on_item_idx += 1;
+                }
+                // self.on_item_idx = (self.on_item_idx + 1) % len;
             }
         }
+        self.update_on_item_dir();
+        true
+    }
+
+    fn update_on_item_dir(&mut self) {
+        self.on_item_dir = self.path_items.get(self.on_item_idx).unwrap().full_path.clone();
     }
 }
 

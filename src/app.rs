@@ -28,8 +28,8 @@ impl App {
     }
 
     pub fn run(&mut self) -> Result<(), failure::Error> {
-        let f_name = String::from("Assets/Example/wowaka - アンハッピーリフレイン.mp3");
-        self.music_player.add_to_playlist(f_name, true);
+        // let f_name = String::from("Assets/Example/wowaka - アンハッピーリフレイン.mp3");
+        // self.music_player.add_to_playlist(f_name, true);
 
         let mut terminal = ratatui::init();
 
