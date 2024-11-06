@@ -86,13 +86,19 @@ impl App {
         let layout = Layout::default()
             .direction(Direction::Vertical)
             .constraints(vec![
-                Constraint::Percentage(25),
-                Constraint::Percentage(25),
+                Constraint::Percentage(50),
                 Constraint::Percentage(50),
             ])
             .split(frame.area());
-        draw_prompts(frame, layout[0]).unwrap();
-        draw_fs_controller(self, frame, layout[1]).unwrap();
-        draw_player_status(self, frame, layout[2]).unwrap();
+        let layout_upper = Layout::default()
+            .direction(Direction::Horizontal)
+            .constraints(vec![
+                Constraint::Percentage(50),
+                Constraint::Percentage(50),
+            ])
+            .split(layout[0]);
+        draw_prompts(frame, layout_upper[0]).unwrap();
+        draw_fs_controller(self, frame, layout_upper[1]).unwrap();
+        draw_player_status(self, frame, layout[1]).unwrap();
     }
 }
